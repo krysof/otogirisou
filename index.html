@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="theme-color" content="#080b0d">
+  <meta name="game-version" content="20260722.5">
+  <meta name="translation-preview" content="false">
+  <title>Otogirisou</title>
+  <link rel="stylesheet" href="style.css?v=20260722.5">
+</head>
+<body>
+  <main id="console" class="console">
+    <section class="controls left-controls" aria-label="Directional controls">
+      <div class="dpad" aria-label="Direction pad">
+        <button class="pad up" type="button" data-input="up" aria-label="Up">▲</button>
+        <button class="pad left" type="button" data-input="left" aria-label="Left">◀</button>
+        <span class="pad-center" aria-hidden="true"></span>
+        <button class="pad right" type="button" data-input="right" aria-label="Right">▶</button>
+        <button class="pad down" type="button" data-input="down" aria-label="Down">▼</button>
+      </div>
+    </section>
+    <section class="stage" aria-label="Otogirisou game canvas">
+      <canvas id="screen" width="1280" height="1120"></canvas>
+      <canvas id="text-screen" width="1234" height="1080" hidden></canvas>
+      <video id="ending-video" width="256" height="224" playsinline hidden></video>
+      <div id="launch-confirm" class="launch-confirm" role="dialog"
+           aria-modal="true"
+           aria-labelledby="launch-title" aria-describedby="launch-version">
+        <h1 id="launch-title">弟切草</h1>
+        <p id="launch-version">VERSION 20260722.5</p>
+        <p class="launch-credit"><strong>白河愁</strong><span>http://www.ff18.com</span></p>
+        <p id="launch-preview" class="launch-preview" hidden></p>
+        <button id="launch-button" type="button" autofocus>确定</button>
+      </div>
+    </section>
+    <section class="controls right-controls" aria-label="Action controls">
+      <div class="utility-controls">
+        <div id="language-picker" class="language-picker">
+          <button id="language-button" class="language-button" type="button"
+                  aria-haspopup="menu" aria-expanded="false"
+                  aria-controls="language-menu" title="Text language">
+            <span class="globe-icon" aria-hidden="true">&#127760;</span>
+            <span id="language-button-label" class="visually-hidden">Text language</span>
+          </button>
+          <div id="language-menu" class="language-menu" role="menu" hidden>
+            <button type="button" role="menuitemradio" data-language="auto"
+                    aria-checked="true"><span id="auto-language-label">Auto</span></button>
+            <button type="button" role="menuitemradio" data-language="ja"
+                    aria-checked="false">日本語</button>
+            <button type="button" role="menuitemradio" data-language="zh-Hant"
+                    aria-checked="false">繁體中文</button>
+            <button type="button" role="menuitemradio" data-language="yue"
+                    aria-checked="false">粵語</button>
+            <button type="button" role="menuitemradio" data-language="en"
+                    aria-checked="false">English</button>
+            <button type="button" role="menuitemradio" data-language="ko"
+                    aria-checked="false">한국어</button>
+            <button type="button" role="menuitemradio" data-language="zh-Hans"
+                    aria-checked="false">简体中文</button>
+          </div>
+        </div>
+        <div id="voice-language-picker" class="language-picker">
+          <button id="voice-language-button" class="language-button" type="button"
+                  aria-haspopup="menu" aria-expanded="false"
+                  aria-controls="voice-language-menu" title="Voice language">
+            <span class="voice-language-icon" aria-hidden="true">&#128483;</span>
+            <span id="voice-language-button-label" class="visually-hidden">Voice language</span>
+          </button>
+          <div id="voice-language-menu" class="language-menu" role="menu" hidden>
+            <button type="button" role="menuitemradio" data-voice-language="auto"
+                    aria-checked="true"><span id="voice-auto-language-label">Auto</span></button>
+            <button type="button" role="menuitemradio" data-voice-language="ja"
+                    aria-checked="false">日本語</button>
+            <button type="button" role="menuitemradio" data-voice-language="zh-Hant"
+                    aria-checked="false">繁體中文</button>
+            <button type="button" role="menuitemradio" data-voice-language="yue"
+                    aria-checked="false">粵語</button>
+            <button type="button" role="menuitemradio" data-voice-language="en"
+                    aria-checked="false">English</button>
+            <button type="button" role="menuitemradio" data-voice-language="ko"
+                    aria-checked="false">한국어</button>
+            <button type="button" role="menuitemradio" data-voice-language="zh-Hans"
+                    aria-checked="false">简体中文</button>
+          </div>
+        </div>
+        <button id="music-toggle" class="audio-toggle" type="button" role="switch"
+                aria-checked="true" aria-label="Music" title="Music">
+          <span class="music-icon" aria-hidden="true">&#9835;</span>
+          <span id="music-toggle-label" class="visually-hidden">Music</span>
+        </button>
+        <button id="voice-toggle" class="audio-toggle" type="button" role="switch"
+                aria-checked="true" aria-label="Voice" title="Voice">
+          <span class="voice-icon" aria-hidden="true">&#128266;</span>
+          <span id="voice-toggle-label" class="visually-hidden">Voice</span>
+        </button>
+      </div>
+      <div class="save-controls" aria-label="Save controls">
+        <button id="load-button" type="button">读档</button>
+        <button id="save-button" type="button">存档</button>
+      </div>
+      <div class="actions" aria-label="Action buttons">
+        <button id="cancel-button" class="action cancel" type="button"
+                data-input="cancel"><span id="cancel-button-label">取消</span><small>B</small></button>
+        <button id="confirm-button" class="action confirm" type="button"
+                data-input="confirm"><span id="confirm-button-label">确定</span><small>A</small></button>
+      </div>
+    </section>
+  </main>
+  <div id="save-overlay" class="save-overlay" role="dialog" aria-modal="true"
+       aria-labelledby="save-dialog-title" hidden>
+    <section class="save-panel">
+      <header class="save-header">
+        <div>
+          <h2 id="save-dialog-title">存档</h2>
+          <p id="save-dialog-summary">100 个存档位</p>
+        </div>
+        <button id="save-dialog-close" class="save-dialog-close" type="button"
+                aria-label="返回">返回</button>
+      </header>
+      <p id="save-dialog-message" class="save-dialog-message" role="status" hidden></p>
+      <div id="save-slot-list" class="save-slot-list" role="list"></div>
+      <div id="overwrite-confirm" class="overwrite-confirm" role="alertdialog"
+           aria-modal="true" aria-labelledby="overwrite-title" hidden>
+        <div class="overwrite-dialog">
+          <h3 id="overwrite-title">覆盖存档？</h3>
+          <p id="overwrite-message"></p>
+          <div class="overwrite-actions">
+            <button id="overwrite-cancel" type="button">取消</button>
+            <button id="overwrite-confirm-button" type="button">确定</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div id="name-input-overlay" class="name-input-overlay" role="dialog"
+       aria-modal="true" aria-labelledby="name-input-title" hidden>
+    <form id="name-input-form" class="name-input-panel">
+      <h2 id="name-input-title">Name</h2>
+      <input id="name-input" type="text" autocomplete="off"
+             autocapitalize="words" enterkeyhint="done" spellcheck="false">
+      <p id="name-input-error" class="name-input-error" role="alert" hidden></p>
+      <div class="name-input-actions">
+        <button id="name-input-cancel" type="button">Cancel</button>
+        <button id="name-input-confirm" type="submit">OK</button>
+      </div>
+    </form>
+  </div>
+  <p id="status" role="status">请确认版本后开始</p>
+  <script src="otogirisou.js?v=20260722.5"></script>
+  <script src="hd-renderer.js?v=20260722.5"></script>
+  <script src="text-renderer.js?v=20260722.5"></script>
+  <script src="name-voice.js?v=20260722.5"></script>
+  <script src="voice-player.js?v=20260722.5"></script>
+  <script src="save-store.js?v=20260722.5"></script>
+  <script src="app.js?v=20260722.5"></script>
+</body>
+</html>
